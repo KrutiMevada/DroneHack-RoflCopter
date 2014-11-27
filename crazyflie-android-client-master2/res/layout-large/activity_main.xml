@@ -4,14 +4,6 @@
     android:layout_height="match_parent"
     android:orientation="vertical" >
 
-    <CheckBox
-        android:id="@+id/chk_box"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
-        android:padding="10dp"
-        android:text="Connect/Disconnect" />
-
     <se.bitcraze.crazyfliecontrol.FlightDataView
         android:id="@+id/flightdataview"
         android:layout_width="match_parent"
@@ -24,5 +16,13 @@
         android:layout_height="wrap_content"
         android:layout_weight="0.13"
         android:gravity="bottom" />
+
+    <CheckBox
+        android:id="@+id/chk_box"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:padding="10dp"
+        android:text="Connect/Disconnect" />
 
 </LinearLayout>

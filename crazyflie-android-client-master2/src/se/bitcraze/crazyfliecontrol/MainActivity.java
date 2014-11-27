@@ -61,13 +61,16 @@ import android.util.Log;
 import android.view.InputDevice;
 import android.view.KeyEvent;
 import android.view.Menu;
-import android.view.MenuItem;
 import android.view.MotionEvent;
+import android.view.View;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
+import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.Toast;
 
 import com.MobileAnarchy.Android.Widgets.Joystick.DualJoystickView;
 
-public class MainActivity extends Activity {
+public class MainActivity extends Activity implements OnCheckedChangeListener {
 
 	private static final String TAG = "CrazyflieControl";
 
@@ -95,13 +98,16 @@ public class MainActivity extends Activity {
 	private int mSoundConnect;
 	private int mSoundDisconnect;
 
+	private CheckBox mChkConnectDisconnect;
+
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
 
 		setDefaultPreferenceValues();
-
+		View v = findViewById(R.id.chk_box);
+		mChkConnectDisconnect = (CheckBox) v;
 		mControls = new Controls(this, mPreferences);
 		mControls.setDefaultPreferenceValues(getResources());
 
@@ -109,6 +115,8 @@ public class MainActivity extends Activity {
 		mDualJoystickView = (DualJoystickView) findViewById(R.id.joysticks);
 		mController = new TouchController(mControls, this, mDualJoystickView);
 
+		mChkConnectDisconnect.setChecked(false);
+		mChkConnectDisconnect.setOnCheckedChangeListener(this);
 		// initialize gamepad controller
 		mGamepadController = new GamepadController(mControls, this,
 				mPreferences);
@@ -148,6 +156,8 @@ public class MainActivity extends Activity {
 
 		mRadioChannelDefaultValue = getString(R.string.preferences_radio_channel_defaultValue);
 		mRadioDatarateDefaultValue = getString(R.string.preferences_radio_datarate_defaultValue);
+		Log.e(" mRadioChannelDefaultValue : ", mRadioChannelDefaultValue);
+		Log.e(" mRadioDatarateDefaultValue : ", mRadioDatarateDefaultValue);
 	}
 
 	private void checkScreenLock() {
@@ -162,38 +172,6 @@ public class MainActivity extends Activity {
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		getMenuInflater().inflate(R.menu.activity_main, menu);
-		return true;
-	}
-
-	@Override
-	public boolean onPrepareOptionsMenu(final Menu menu) {
-		if (mCrazyradioLink != null && mCrazyradioLink.isConnected()) {
-			menu.findItem(R.id.menu_connect).setTitle(R.string.menu_disconnect);
-		} else {
-			menu.findItem(R.id.menu_connect).setTitle(R.string.menu_connect);
-		}
-		return super.onPrepareOptionsMenu(menu);
-	}
-
-	@Override
-	public boolean onOptionsItemSelected(MenuItem item) {
-		switch (item.getItemId()) {
-		case R.id.menu_connect:
-			try {
-				if (mCrazyradioLink != null && mCrazyradioLink.isConnected()) {
-					linkDisconnect();
-				} else {
-					linkConnect();
-				}
-			} catch (IllegalStateException e) {
-				Toast.makeText(this, e.getMessage(), Toast.LENGTH_SHORT).show();
-			}
-			break;
-		case R.id.preferences:
-			Intent intent = new Intent(this, PreferencesActivity.class);
-			startActivity(intent);
-			break;
-		}
 		return true;
 	}
 
@@ -493,6 +471,21 @@ public class MainActivity extends Activity {
 
 	public IController getController() {
 		return mController;
+	}
+
+	@Override
+	public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+		try {
+			if (isChecked) {
+				linkConnect();
+			} else {
+				if (mCrazyradioLink != null && mCrazyradioLink.isConnected()) {
+					linkDisconnect();
+				}
+			}
+		} catch (IllegalStateException e) {
+			Toast.makeText(this, e.getMessage(), Toast.LENGTH_SHORT).show();
+		}
 	}
 
 }
