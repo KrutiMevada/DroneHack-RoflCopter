@@ -62,7 +62,6 @@ import android.view.InputDevice;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MotionEvent;
-import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.Toast;
@@ -97,8 +96,6 @@ public class MainActivity extends Activity implements OnCheckedChangeListener {
 	private boolean mLoaded;
 	private int mSoundConnect;
 	private int mSoundDisconnect;
-
-	private CheckBox mChkConnectDisconnect;
 
 	private ToggleButton mToggleButton;
 
