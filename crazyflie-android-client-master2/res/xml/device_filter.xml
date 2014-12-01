@@ -2,8 +2,6 @@
 <resources>
 
     <!-- Crazyradio Dongle -->
-    <usb-device
-        product-id="30583"
-        vendor-id="6421" />
+    <usb-device product-id="30583" vendor-id="6421" />
 
 </resources>

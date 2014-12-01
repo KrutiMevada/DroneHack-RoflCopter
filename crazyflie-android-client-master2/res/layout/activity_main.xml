@@ -2,27 +2,137 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@drawable/bg_drone"
     android:orientation="vertical" >
 
-    <CheckBox
-        android:id="@+id/chk_box"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
-        android:padding="10dp"
-        android:text="Connect/Disconnect" />
-
-    <se.bitcraze.crazyfliecontrol.FlightDataView
-        android:id="@+id/flightdataview"
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_weight="0.15" />
+        android:layout_height="70dp"
+        android:background="@drawable/ic_title_bar" >
 
-    <com.MobileAnarchy.Android.Widgets.Joystick.DualJoystickView
-        android:id="@+id/joysticks"
+        <ImageView
+            android:id="@+id/img_logo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="10dp"
+            android:src="@drawable/ic_app_logo" />
+
+        <ToggleButton
+            android:id="@+id/toggle_connect_disconnect"
+            android:layout_width="50dp"
+            android:layout_height="30dp"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="10dp"
+            android:layout_toLeftOf="@+id/chk_signal_1"
+            android:background="@drawable/custom_connect_button"
+            android:textOff=""
+            android:textOn="" />
+
+        <TextView
+            android:id="@+id/txt_power"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignLeft="@+id/toggle_connect_disconnect"
+            android:layout_alignParentBottom="true"
+            android:layout_alignRight="@+id/toggle_connect_disconnect"
+            android:layout_marginBottom="8dp"
+            android:gravity="right"
+            android:text="Power"
+            android:textColor="@color/text_color"
+            android:textSize="10dp" />
+
+        <CheckBox
+            android:id="@+id/chk_signal_1"
+            android:layout_width="@dimen/signal_height_width"
+            android:layout_height="@dimen/signal_height_width"
+            android:layout_centerVertical="true"
+            android:layout_toLeftOf="@+id/chk_signal_2"
+            android:background="@drawable/custom_signal_button"
+            android:button="@null"
+            android:checked="true" />
+
+        <CheckBox
+            android:id="@+id/chk_signal_2"
+            android:layout_width="@dimen/signal_height_width"
+            android:layout_height="@dimen/signal_height_width"
+            android:layout_centerVertical="true"
+            android:layout_toLeftOf="@+id/chk_signal_3"
+            android:background="@drawable/custom_signal_button"
+            android:button="@null" />
+
+        <CheckBox
+            android:id="@+id/chk_signal_3"
+            android:layout_width="@dimen/signal_height_width"
+            android:layout_height="@dimen/signal_height_width"
+            android:layout_centerVertical="true"
+            android:layout_toLeftOf="@+id/chk_signal_4"
+            android:background="@drawable/custom_signal_button"
+            android:button="@null" />
+
+        <CheckBox
+            android:id="@+id/chk_signal_4"
+            android:layout_width="@dimen/signal_height_width"
+            android:layout_height="@dimen/signal_height_width"
+            android:layout_centerVertical="true"
+            android:layout_toLeftOf="@+id/chk_signal_5"
+            android:background="@drawable/custom_signal_button"
+            android:button="@null" />
+
+        <CheckBox
+            android:id="@+id/chk_signal_5"
+            android:layout_width="@dimen/signal_height_width"
+            android:layout_height="@dimen/signal_height_width"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:background="@drawable/custom_signal_button"
+            android:button="@null" />
+    </RelativeLayout>
+
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_weight="0.85"
-        android:gravity="bottom" />
+        android:layout_height="match_parent"
+        android:orientation="vertical" >
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal"
+            android:weightSum="3" >
+
+            <View
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1" />
+
+            <ImageView
+                android:id="@+id/layout_drone"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:scaleType="fitXY"
+                android:src="@drawable/ic_dronefly_img" />
+
+            <View
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1" />
+        </LinearLayout>
+
+        <se.bitcraze.crazyfliecontrol.FlightDataView
+            android:id="@+id/flightdataview"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.15" />
+
+        <com.MobileAnarchy.Android.Widgets.Joystick.DualJoystickView
+            android:id="@+id/joysticks"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/flightdataview"
+            android:layout_weight="0.85"
+            android:gravity="right|center_vertical" />
+    </RelativeLayout>
 
 </LinearLayout>

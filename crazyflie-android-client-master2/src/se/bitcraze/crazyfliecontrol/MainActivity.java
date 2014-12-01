@@ -62,11 +62,11 @@ import android.view.InputDevice;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MotionEvent;
-import android.view.View;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.Toast;
+import android.widget.ToggleButton;
 
 import com.MobileAnarchy.Android.Widgets.Joystick.DualJoystickView;
 
@@ -100,14 +100,17 @@ public class MainActivity extends Activity implements OnCheckedChangeListener {
 
 	private CheckBox mChkConnectDisconnect;
 
+	private ToggleButton mToggleButton;
+
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
 
 		setDefaultPreferenceValues();
-		View v = findViewById(R.id.chk_box);
-		mChkConnectDisconnect = (CheckBox) v;
+		mToggleButton = (ToggleButton) findViewById(R.id.toggle_connect_disconnect);
+		mToggleButton.setChecked(false);
+		mToggleButton.setOnCheckedChangeListener(this);
 		mControls = new Controls(this, mPreferences);
 		mControls.setDefaultPreferenceValues(getResources());
 
@@ -115,8 +118,6 @@ public class MainActivity extends Activity implements OnCheckedChangeListener {
 		mDualJoystickView = (DualJoystickView) findViewById(R.id.joysticks);
 		mController = new TouchController(mControls, this, mDualJoystickView);
 
-		mChkConnectDisconnect.setChecked(false);
-		mChkConnectDisconnect.setOnCheckedChangeListener(this);
 		// initialize gamepad controller
 		mGamepadController = new GamepadController(mControls, this,
 				mPreferences);
