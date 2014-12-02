@@ -81,5 +81,6 @@
     <string name="thrust">Thrust: %1$s</string>
     <string name="yaw">Yaw: %1$s</string>
     <string name="linkQuality">Link: %1$s</string>
+    <string name="link">Link: </string>
 
 </resources>

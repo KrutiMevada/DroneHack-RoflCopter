@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <dimen name="signal_height_width">15dp</dimen>
+    <dimen name="margin_top_signal">50dp</dimen>
+
+</resources>

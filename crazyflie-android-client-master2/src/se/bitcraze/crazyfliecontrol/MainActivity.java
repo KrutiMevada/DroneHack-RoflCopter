@@ -29,6 +29,8 @@ package se.bitcraze.crazyfliecontrol;
 
 import java.io.IOException;
 import java.util.Locale;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import se.bitcraze.crazyfliecontrol.controller.Controls;
 import se.bitcraze.crazyfliecontrol.controller.GamepadController;
@@ -62,6 +64,9 @@ import android.view.InputDevice;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MotionEvent;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.Toast;
@@ -69,7 +74,8 @@ import android.widget.ToggleButton;
 
 import com.MobileAnarchy.Android.Widgets.Joystick.DualJoystickView;
 
-public class MainActivity extends Activity implements OnCheckedChangeListener {
+public class MainActivity extends Activity implements OnCheckedChangeListener,
+		OnClickListener {
 
 	private static final String TAG = "CrazyflieControl";
 
@@ -96,8 +102,10 @@ public class MainActivity extends Activity implements OnCheckedChangeListener {
 	private boolean mLoaded;
 	private int mSoundConnect;
 	private int mSoundDisconnect;
-
+	private Button mBtnAutoFly;
 	private ToggleButton mToggleButton;
+	private Timer mSendJoystickAutomatedDataThread;
+	private int mThrust = 0;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -110,7 +118,8 @@ public class MainActivity extends Activity implements OnCheckedChangeListener {
 		mToggleButton.setOnCheckedChangeListener(this);
 		mControls = new Controls(this, mPreferences);
 		mControls.setDefaultPreferenceValues(getResources());
-
+		mBtnAutoFly = (Button) findViewById(R.id.btn_fly);
+		mBtnAutoFly.setOnClickListener(this);
 		// Default controller
 		mDualJoystickView = (DualJoystickView) findViewById(R.id.joysticks);
 		mController = new TouchController(mControls, this, mDualJoystickView);
@@ -433,6 +442,7 @@ public class MainActivity extends Activity implements OnCheckedChangeListener {
 				}
 			});
 			mSendJoystickDataThread.start();
+
 		} catch (IllegalArgumentException e) {
 			Log.d(TAG, e.getMessage());
 			Toast.makeText(this, "Crazyradio not attached", Toast.LENGTH_SHORT)
@@ -486,4 +496,32 @@ public class MainActivity extends Activity implements OnCheckedChangeListener {
 		}
 	}
 
+	@Override
+	public void onClick(View v) {
+		if (v.getId() == R.id.btn_fly) {
+			if (mThrust != 0) {
+				mThrust = 0;
+			}
+			mSendJoystickAutomatedDataThread = new Timer();
+			mSendJoystickAutomatedDataThread.scheduleAtFixedRate(
+					new TimerTask() {
+						@Override
+						public void run() {
+							Log.e("Timertask", "Timertask Started ..... ");
+							if (mCrazyradioLink != null && mThrust <= 80) {
+								mThrust = mThrust + 5;
+								mCrazyradioLink.send(new CommanderPacket(
+										mController.getRoll(), mController
+												.getPitch(), mController
+												.getYaw(), (char) (mThrust),
+										mControls.isXmode()));
+							} else {
+								Log.e("Timertask",
+										"Timertask cancelling ..... ");
+								cancel();
+							}
+						}
+					}, 500, 1000);
+		}
+	}
 }
