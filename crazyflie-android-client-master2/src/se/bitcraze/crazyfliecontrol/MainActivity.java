@@ -105,7 +105,7 @@ public class MainActivity extends Activity implements OnCheckedChangeListener,
 	private Button mBtnAutoFly;
 	private ToggleButton mToggleButton;
 	private Timer mSendJoystickAutomatedDataThread;
-	private int mThrust = 0;
+	private int mThrust = 12500;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -502,33 +502,35 @@ public class MainActivity extends Activity implements OnCheckedChangeListener,
 
 	@Override
 	public void onClick(View v) {
-		if (v.getId() == R.id.btn_fly) {
-			if (mThrust != 0) {
-				mThrust = 0;
+		if (v != null && v.getId() == R.id.btn_fly) {
+			if (mThrust != 12500) {
+				mThrust = 12500;
 			}
 			mSendJoystickAutomatedDataThread = new Timer();
 			mSendJoystickAutomatedDataThread.scheduleAtFixedRate(
 					new TimerTask() {
 						@Override
 						public void run() {
-							Log.e("Timertask", "Timertask Started ..... ");
-							if (mCrazyradioLink != null && mThrust <= 25000) {
-								mThrust = mThrust + 1000;
-								// double customThrust = (mThrust * 36069.25) /
-								// 100;
-								mCrazyradioLink.send(new CommanderPacket(
-										mController.getRoll(), mController
-												.getPitch(), mController
-												.getYaw(), (char) (mThrust),
-										mControls.isXmode()));
-								updateFlightData();
-							} else {
-								Log.e("Timertask",
-										"Timertask cancelling ..... ");
-								cancel();
-							}
+							runOnUiThread(new Runnable() {
+								public void run() {
+									Log.e("Timertask",
+											"Timertask Started ..... ");
+									if (mCrazyradioLink != null) {
+										if (mThrust <= 49000) {
+											mThrust = mThrust + 1000;
+										}
+
+										mCrazyradioLink
+												.send(new CommanderPacket(0, 0,
+														0, (char) (mThrust),
+														false));
+										mFlightDataView.updateFlightData(0, 0,
+												mThrust, 0);
+									}
+								}
+							});
 						}
-					}, 0, 500);
+					}, 0, 100);
 		}
 	}
 }

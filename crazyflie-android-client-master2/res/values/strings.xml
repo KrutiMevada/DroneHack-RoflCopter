@@ -82,5 +82,6 @@
     <string name="yaw">Yaw: %1$s</string>
     <string name="linkQuality">Link: %1$s</string>
     <string name="link">Link: </string>
+    <string name="crash_toast_text">OMG Crasheddddd</string>
 
 </resources>
