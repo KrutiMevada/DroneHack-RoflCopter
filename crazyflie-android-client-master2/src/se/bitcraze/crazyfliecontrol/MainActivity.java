@@ -289,10 +289,15 @@ public class MainActivity extends Activity implements OnCheckedChangeListener,
 
 	private void resetInputMethod() {
 		// TODO: reuse existing touch controller?
-
-		mController = new GyroscopeController(mControls, this,
-				mDualJoystickView,
-				(SensorManager) getSystemService(Context.SENSOR_SERVICE));
+		// Use GyroscopeController if activated in the preferences
+		if (mControls.isUseGyro()) {
+			mController = new GyroscopeController(mControls, this,
+					mDualJoystickView,
+					(SensorManager) getSystemService(Context.SENSOR_SERVICE));
+		} else {
+			mController = new TouchController(mControls, this,
+					mDualJoystickView);
+		}
 		mController.enable();
 	}
 
@@ -432,7 +437,6 @@ public class MainActivity extends Activity implements OnCheckedChangeListener,
 								.getRoll(), mController.getPitch(), mController
 								.getYaw(), (char) (mController.getThrust()),
 								mControls.isXmode()));
-
 						try {
 							Thread.sleep(20, 0);
 						} catch (InterruptedException e) {
@@ -508,20 +512,23 @@ public class MainActivity extends Activity implements OnCheckedChangeListener,
 						@Override
 						public void run() {
 							Log.e("Timertask", "Timertask Started ..... ");
-							if (mCrazyradioLink != null && mThrust <= 80) {
-								mThrust = mThrust + 5;
+							if (mCrazyradioLink != null && mThrust <= 25000) {
+								mThrust = mThrust + 1000;
+								// double customThrust = (mThrust * 36069.25) /
+								// 100;
 								mCrazyradioLink.send(new CommanderPacket(
 										mController.getRoll(), mController
 												.getPitch(), mController
 												.getYaw(), (char) (mThrust),
 										mControls.isXmode()));
+								updateFlightData();
 							} else {
 								Log.e("Timertask",
 										"Timertask cancelling ..... ");
 								cancel();
 							}
 						}
-					}, 500, 1000);
+					}, 0, 500);
 		}
 	}
 }

@@ -37,60 +37,63 @@ import android.widget.TextView;
 
 /**
  * Compound component that groups together flight data UI elements
- *
+ * 
  */
 public class FlightDataView extends LinearLayout {
 
-    private TextView mTextView_pitch;
-    private TextView mTextView_roll;
-    private TextView mTextView_thrust;
-    private TextView mTextView_yaw;
-    private TextView mTextView_linkQuality;
+	private TextView mTextView_pitch;
+	private TextView mTextView_roll;
+	private TextView mTextView_thrust;
+	private TextView mTextView_yaw;
+	private TextView mTextView_linkQuality;
 
-    public FlightDataView(Context context, AttributeSet attrs) {
-      super(context, attrs);
+	public FlightDataView(Context context, AttributeSet attrs) {
+		super(context, attrs);
 
-      setOrientation(LinearLayout.HORIZONTAL);
+		setOrientation(LinearLayout.HORIZONTAL);
 
-      LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-      inflater.inflate(R.layout.view_flight_data, this, true);
-      
-      mTextView_pitch = (TextView) findViewById(R.id.pitch);
-      mTextView_roll = (TextView) findViewById(R.id.roll);
-      mTextView_thrust = (TextView) findViewById(R.id.thrust);
-      mTextView_yaw = (TextView) findViewById(R.id.yaw);
-      mTextView_linkQuality = (TextView) findViewById(R.id.linkQuality);
-      //initialize
-      mTextView_pitch.setText(format(R.string.pitch, 0.0));
-      mTextView_roll.setText(format(R.string.roll, 0.0));
-      mTextView_thrust.setText(format(R.string.thrust, 0.0));
-      mTextView_yaw.setText(format(R.string.yaw, 0.0));
-      setLinkQualityText("n/a");
-    }
+		LayoutInflater inflater = (LayoutInflater) context
+				.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+		inflater.inflate(R.layout.view_flight_data, this, true);
 
-    public FlightDataView(Context context) {
-      this(context, null);
-    }
+		mTextView_pitch = (TextView) findViewById(R.id.pitch);
+		mTextView_roll = (TextView) findViewById(R.id.roll);
+		mTextView_thrust = (TextView) findViewById(R.id.thrust);
+		mTextView_yaw = (TextView) findViewById(R.id.yaw);
+		mTextView_linkQuality = (TextView) findViewById(R.id.linkQuality);
+		// initialize
+		mTextView_pitch.setText(format(R.string.pitch, 0.0));
+		mTextView_roll.setText(format(R.string.roll, 0.0));
+		mTextView_thrust.setText(format(R.string.thrust, 0.0));
+		mTextView_yaw.setText(format(R.string.yaw, 0.0));
+		setLinkQualityText("n/a");
+	}
 
-    public void updateFlightData(float pitch, float roll, float thrust, float yaw) {
-        mTextView_pitch.setText(format(R.string.pitch, round(pitch)));
-        mTextView_roll.setText(format(R.string.roll, round(roll)));
-        mTextView_thrust.setText(format(R.string.thrust, round(thrust)));
-        mTextView_yaw.setText(format(R.string.yaw, round(yaw)));
-    }
+	public FlightDataView(Context context) {
+		this(context, null);
+	}
 
-    private String format(int identifier, Object o){
-        return String.format(getResources().getString(identifier), o);
-    }
+	public void updateFlightData(float pitch, float roll, float thrust,
+			float yaw) {
+		mTextView_pitch.setText(format(R.string.pitch, round(pitch)));
+		mTextView_roll.setText(format(R.string.roll, round(roll)));
+		// double percentageThrust = (thrust * 100) / 36069.25;
+		mTextView_thrust.setText(format(R.string.thrust, round(thrust)));
+		mTextView_yaw.setText(format(R.string.yaw, round(yaw)));
+	}
 
-    public static double round(double unrounded) {
-        BigDecimal bd = new BigDecimal(unrounded);
-        BigDecimal rounded = bd.setScale(2, BigDecimal.ROUND_HALF_UP);
-        return rounded.doubleValue();
-    }
-    
-    public void setLinkQualityText(String quality){
-        mTextView_linkQuality.setText(format(R.string.linkQuality, quality));
-    }
+	private String format(int identifier, Object o) {
+		return String.format(getResources().getString(identifier), o);
+	}
+
+	public static double round(double unrounded) {
+		BigDecimal bd = new BigDecimal(unrounded);
+		BigDecimal rounded = bd.setScale(2, BigDecimal.ROUND_HALF_UP);
+		return rounded.doubleValue();
+	}
+
+	public void setLinkQualityText(String quality) {
+		mTextView_linkQuality.setText(format(R.string.linkQuality, quality));
+	}
 
 }

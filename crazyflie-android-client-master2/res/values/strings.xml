@@ -30,7 +30,7 @@
     <string name="preferences_maxYawAngle_title">Max yaw angle</string>
     <string name="preferences_maxYawAngle_defaultValue">150</string>
     <string name="preferences_maxThrust_title">Max thrust (%)</string>
-    <string name="preferences_maxThrust_defaultValue">80</string>
+    <string name="preferences_maxThrust_defaultValue">100</string>
     <string name="preferences_minThrust_title">Min thrust (%)</string>
     <string name="preferences_minThrust_defaultValue">25</string>
     <string name="preferences_reset_afc_title">Reset values</string>

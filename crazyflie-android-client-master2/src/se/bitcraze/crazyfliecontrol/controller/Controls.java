@@ -36,6 +36,8 @@ public class Controls {
 	private int mMode; // Controller axis mapping (Mode 1-4)
 	private float mDeadzone;
 
+	private boolean mUseGyro;
+
 	private String mModeDefaultValue;
 	private String mDeadzoneDefaultValue;
 
@@ -45,7 +47,7 @@ public class Controls {
 	// Advanced flight control
 	private int mMaxRollPitchAngle;
 	private int mMaxYawAngle;
-	private final int mMaxThrust = 100;
+	private int mMaxThrust;
 	private int mMinThrust;
 
 	// Advanced flight control default values
@@ -90,6 +92,9 @@ public class Controls {
 		this.mPitchTrim = Float.parseFloat(mPreferences.getString(
 				PreferencesActivity.KEY_PREF_PITCHTRIM, mTrimDefaultValue));
 
+		this.mUseGyro = mPreferences.getBoolean(
+				PreferencesActivity.KEY_PREF_USE_GYRO_BOOL, false);
+
 		// Advanced flight control
 		if (mPreferences.getBoolean(PreferencesActivity.KEY_PREF_AFC_BOOL,
 				false)) {
@@ -99,6 +104,9 @@ public class Controls {
 			this.mMaxYawAngle = Integer.parseInt(mPreferences.getString(
 					PreferencesActivity.KEY_PREF_MAX_YAW_ANGLE,
 					mMaxYawAngleDefaultValue));
+			this.mMaxThrust = Integer.parseInt(mPreferences.getString(
+					PreferencesActivity.KEY_PREF_MAX_THRUST,
+					mMaxThrustDefaultValue));
 			this.mMinThrust = Integer.parseInt(mPreferences.getString(
 					PreferencesActivity.KEY_PREF_MIN_THRUST,
 					mMinThrustDefaultValue));
@@ -108,6 +116,7 @@ public class Controls {
 			this.mMaxRollPitchAngle = Integer
 					.parseInt(mMaxRollPitchAngleDefaultValue);
 			this.mMaxYawAngle = Integer.parseInt(mMaxYawAngleDefaultValue);
+			this.mMaxThrust = Integer.parseInt(mMaxThrustDefaultValue);
 			this.mMinThrust = Integer.parseInt(mMinThrustDefaultValue);
 			this.mXmode = false;
 		}
@@ -184,6 +193,10 @@ public class Controls {
 
 	public float getDeadzone() {
 		return mDeadzone;
+	}
+
+	public boolean isUseGyro() {
+		return mUseGyro;
 	}
 
 	public float getRightAnalog_X() {
