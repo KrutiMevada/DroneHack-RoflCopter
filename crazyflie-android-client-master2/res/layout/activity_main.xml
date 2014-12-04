@@ -9,45 +9,48 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content" >
 
-        <LinearLayout
-            android:id="@+id/layot_1"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="vertical" >
+        <ImageView
+            android:id="@+id/img_logo"
+            android:layout_width="90dp"
+            android:layout_height="30dp"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="10dp"
+            android:src="@drawable/ic_app_logo" />
 
-            <ImageView
-                android:id="@+id/img_logo"
-                android:layout_width="90dp"
-                android:layout_height="30dp"
-                android:layout_marginLeft="10dp"
-                android:layout_marginTop="10dp"
-                android:src="@drawable/ic_app_logo" />
-
-            <ToggleButton
-                android:id="@+id/toggle_connect_disconnect"
-                android:layout_width="80dp"
-                android:layout_height="25dp"
-                android:layout_marginLeft="10dp"
-                android:background="@drawable/custom_connect_button"
-                android:textOff=""
-                android:textOn="" />
-        </LinearLayout>
+        <ToggleButton
+            android:id="@+id/toggle_connect_disconnect"
+            android:layout_width="80dp"
+            android:layout_height="25dp"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="10dp"
+            android:layout_toRightOf="@+id/img_logo"
+            android:background="@drawable/custom_connect_button"
+            android:textOff=""
+            android:textOn="" />
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
-            android:layout_toRightOf="@+id/layot_1"
-            android:gravity="center_vertical"
+            android:layout_toRightOf="@+id/toggle_connect_disconnect"
+            android:gravity="right|center_vertical"
             android:orientation="horizontal"
             android:weightSum="5" >
+
+            <Button
+                android:id="@+id/btn_fly"
+                android:layout_width="80dp"
+                android:layout_height="40dp"
+                android:layout_marginLeft="10dp"
+                android:text="Fly" />
 
             <LinearLayout
                 android:id="@+id/layout_checks"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="10dp"
-                android:layout_marginTop="10dp"
+                android:layout_marginRight="10dp"
                 android:gravity="center_vertical"
                 android:orientation="horizontal" >
 
@@ -95,25 +98,13 @@
                     android:button="@null" />
             </LinearLayout>
 
-            <Button
-                android:id="@+id/btn_fly"
-                android:layout_width="80dp"
-                android:layout_height="40dp"
-                android:layout_below="@+id/layout_checks"
-                android:layout_marginLeft="10dp"
-                android:layout_marginTop="10dp"
-                android:text="Fly" /> <!-- <ImageView -->
+            <!-- <ImageView -->
             <!-- android:id="@+id/layout_drone" -->
             <!-- android:layout_width="0dp" -->
             <!-- android:layout_height="match_parent" -->
             <!-- android:layout_weight="2" -->
             <!-- android:scaleType="fitXY" -->
             <!-- android:src="@drawable/ic_dronefly_img" /> -->
-
-            <View
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="2" />
         </LinearLayout>
     </RelativeLayout>
 
@@ -121,6 +112,13 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical" >
+
+        <ImageView
+            android:id="@+id/img_drone_rotation"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:src="@drawable/ic_drone_rotator" />
 
         <se.bitcraze.crazyfliecontrol.FlightDataView
             android:id="@+id/flightdataview"

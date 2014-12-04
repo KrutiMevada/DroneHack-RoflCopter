@@ -66,9 +66,12 @@ import android.view.Menu;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.animation.RotateAnimation;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.CompoundButton.OnCheckedChangeListener;
+import android.widget.ImageView;
 import android.widget.Toast;
 import android.widget.ToggleButton;
 
@@ -83,7 +86,7 @@ public class MainActivity extends Activity implements OnCheckedChangeListener,
 	private FlightDataView mFlightDataView;
 
 	private Link mCrazyradioLink;
-
+	private boolean mIncreasingThrust = true;
 	private SharedPreferences mPreferences;
 
 	private IController mController;
@@ -105,7 +108,16 @@ public class MainActivity extends Activity implements OnCheckedChangeListener,
 	private Button mBtnAutoFly;
 	private ToggleButton mToggleButton;
 	private Timer mSendJoystickAutomatedDataThread;
-	private int mThrust = 12500;
+	private int mThrust = 25000;
+	private ImageView mImgDroneRotation;
+
+	private float mOldAnimationAngle = 0;
+
+	private CheckBox mCheckBox1;
+	private CheckBox mCheckBox2;
+	private CheckBox mCheckBox3;
+	private CheckBox mCheckBox4;
+	private CheckBox mCheckBox5;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -120,6 +132,9 @@ public class MainActivity extends Activity implements OnCheckedChangeListener,
 		mControls.setDefaultPreferenceValues(getResources());
 		mBtnAutoFly = (Button) findViewById(R.id.btn_fly);
 		mBtnAutoFly.setOnClickListener(this);
+
+		mImgDroneRotation = (ImageView) findViewById(R.id.img_drone_rotation);
+
 		// Default controller
 		mDualJoystickView = (DualJoystickView) findViewById(R.id.joysticks);
 		mController = new TouchController(mControls, this, mDualJoystickView);
@@ -130,6 +145,12 @@ public class MainActivity extends Activity implements OnCheckedChangeListener,
 		mGamepadController.setDefaultPreferenceValues(getResources());
 
 		mFlightDataView = (FlightDataView) findViewById(R.id.flightdataview);
+
+		mCheckBox1 = (CheckBox) findViewById(R.id.chk_signal_1);
+		mCheckBox2 = (CheckBox) findViewById(R.id.chk_signal_2);
+		mCheckBox3 = (CheckBox) findViewById(R.id.chk_signal_3);
+		mCheckBox4 = (CheckBox) findViewById(R.id.chk_signal_4);
+		mCheckBox5 = (CheckBox) findViewById(R.id.chk_signal_5);
 
 		IntentFilter filter = new IntentFilter();
 		filter.addAction(this.getPackageName() + ".USB_PERMISSION");
@@ -213,6 +234,9 @@ public class MainActivity extends Activity implements OnCheckedChangeListener,
 		unregisterReceiver(mUsbReceiver);
 		mSoundPool.release();
 		mSoundPool = null;
+		if (mSendJoystickAutomatedDataThread != null) {
+			mSendJoystickAutomatedDataThread.cancel();
+		}
 		super.onDestroy();
 	}
 
@@ -240,6 +264,25 @@ public class MainActivity extends Activity implements OnCheckedChangeListener,
 		mFlightDataView.updateFlightData(mController.getPitch(),
 				mController.getRoll(), mController.getThrust(),
 				mController.getYaw());
+
+		try {
+			rotate(mController.getRoll());
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+
+	private void rotate(float degree) {
+
+		final RotateAnimation rotateAnim = new RotateAnimation(
+				mOldAnimationAngle, degree, RotateAnimation.RELATIVE_TO_SELF,
+				0.5f, RotateAnimation.RELATIVE_TO_SELF, 0.5f);
+		if (degree != mOldAnimationAngle) {
+			mOldAnimationAngle = degree;
+		}
+		rotateAnim.setDuration(0);
+		rotateAnim.setFillAfter(true);
+		mImgDroneRotation.startAnimation(rotateAnim);
 	}
 
 	@Override
@@ -421,6 +464,7 @@ public class MainActivity extends Activity implements OnCheckedChangeListener,
 						@Override
 						public void run() {
 							mFlightDataView.setLinkQualityText(quality + "%");
+							updateLinkQuality(quality);
 						}
 					});
 				}
@@ -457,6 +501,49 @@ public class MainActivity extends Activity implements OnCheckedChangeListener,
 		}
 	}
 
+	private void updateLinkQuality(int quality) {
+		if (mCheckBox1 != null && mCheckBox2 != null && mCheckBox3 != null
+				&& mCheckBox4 != null && mCheckBox5 != null) {
+			if (quality == 0) {
+				mCheckBox1.setChecked(false);
+				mCheckBox2.setChecked(false);
+				mCheckBox3.setChecked(false);
+				mCheckBox4.setChecked(false);
+				mCheckBox5.setChecked(false);
+			} else if (quality > 0 && quality <= 20) {
+				mCheckBox1.setChecked(true);
+				mCheckBox2.setChecked(false);
+				mCheckBox3.setChecked(false);
+				mCheckBox4.setChecked(false);
+				mCheckBox5.setChecked(false);
+			} else if (quality > 20 && quality <= 40) {
+				mCheckBox1.setChecked(true);
+				mCheckBox2.setChecked(true);
+				mCheckBox3.setChecked(false);
+				mCheckBox4.setChecked(false);
+				mCheckBox5.setChecked(false);
+			} else if (quality > 40 && quality <= 60) {
+				mCheckBox1.setChecked(true);
+				mCheckBox2.setChecked(true);
+				mCheckBox3.setChecked(true);
+				mCheckBox4.setChecked(false);
+				mCheckBox5.setChecked(false);
+			} else if (quality > 60 && quality <= 80) {
+				mCheckBox1.setChecked(true);
+				mCheckBox2.setChecked(true);
+				mCheckBox3.setChecked(true);
+				mCheckBox4.setChecked(true);
+				mCheckBox5.setChecked(false);
+			} else {
+				mCheckBox1.setChecked(true);
+				mCheckBox2.setChecked(true);
+				mCheckBox3.setChecked(true);
+				mCheckBox4.setChecked(true);
+				mCheckBox5.setChecked(true);
+			}
+		}
+	}
+
 	public Link getCrazyflieLink() {
 		return mCrazyradioLink;
 	}
@@ -466,6 +553,12 @@ public class MainActivity extends Activity implements OnCheckedChangeListener,
 			mCrazyradioLink.disconnect();
 			mCrazyradioLink = null;
 		}
+
+		if (mSendJoystickAutomatedDataThread != null) {
+			mSendJoystickAutomatedDataThread.cancel();
+			mSendJoystickAutomatedDataThread = null;
+		}
+
 		if (mSendJoystickDataThread != null) {
 			mSendJoystickDataThread.interrupt();
 			mSendJoystickDataThread = null;
@@ -477,6 +570,7 @@ public class MainActivity extends Activity implements OnCheckedChangeListener,
 				// link quality is not available when there is no active
 				// connection
 				mFlightDataView.setLinkQualityText("n/a");
+				mToggleButton.setChecked(false);
 			}
 		});
 	}
@@ -503,8 +597,8 @@ public class MainActivity extends Activity implements OnCheckedChangeListener,
 	@Override
 	public void onClick(View v) {
 		if (v != null && v.getId() == R.id.btn_fly) {
-			if (mThrust != 12500) {
-				mThrust = 12500;
+			if (mThrust != 25000) {
+				mThrust = 25000;
 			}
 			mSendJoystickAutomatedDataThread = new Timer();
 			mSendJoystickAutomatedDataThread.scheduleAtFixedRate(
@@ -513,13 +607,25 @@ public class MainActivity extends Activity implements OnCheckedChangeListener,
 						public void run() {
 							runOnUiThread(new Runnable() {
 								public void run() {
-									Log.e("Timertask",
-											"Timertask Started ..... ");
 									if (mCrazyradioLink != null) {
-										if (mThrust <= 49000) {
-											mThrust = mThrust + 1000;
-										}
+										if (mIncreasingThrust) {
+											Log.e("Timertask",
+													"Timertask Started.....");
+											if (mThrust <= 70000) {
+												mThrust = mThrust + 1000;
+											} else {
+												mIncreasingThrust = false;
+											}
 
+										} else {
+											Log.e("Timertask",
+													"Timertask Started.....");
+											if (mThrust >= 25000) {
+												mThrust = mThrust - 1000;
+											} else {
+												mIncreasingThrust = true;
+											}
+										}
 										mCrazyradioLink
 												.send(new CommanderPacket(0, 0,
 														0, (char) (mThrust),

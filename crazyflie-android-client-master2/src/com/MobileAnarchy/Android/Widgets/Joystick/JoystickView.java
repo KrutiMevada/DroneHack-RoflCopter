@@ -1,6 +1,9 @@
 package com.MobileAnarchy.Android.Widgets.Joystick;
 
+import se.bitcraze.crazyfliecontrol.R;
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
@@ -292,6 +295,10 @@ public class JoystickView extends View {
 		handleX = touchX + cX;
 		handleY = touchY + cY;
 		canvas.drawCircle(handleX, handleY, handleRadius, handlePaint);
+		Bitmap myBitmap = BitmapFactory.decodeResource(getResources(),
+				R.drawable.img_arrow_up);
+		canvas.drawBitmap(myBitmap, handleX - (myBitmap.getWidth() / 2),
+				handleY - myBitmap.getHeight(), new Paint());
 
 		if (D) {
 			canvas.drawRect(1, 1, getMeasuredWidth() - 1,
