@@ -21,7 +21,7 @@
         <ToggleButton
             android:id="@+id/toggle_connect_disconnect"
             android:layout_width="80dp"
-            android:layout_height="25dp"
+            android:layout_height="28dp"
             android:layout_centerVertical="true"
             android:layout_marginLeft="10dp"
             android:layout_toRightOf="@+id/img_logo"
